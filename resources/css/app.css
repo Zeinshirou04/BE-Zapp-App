@@ -1,0 +1,43 @@
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap");
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    /* fonts */
+    --font-display: "Syne", sans-serif;
+    --font-sans: "DM Sans", sans-serif;
+
+    /* brand colors */
+    --color-volt: #4f46c8;
+    --color-volt-light: #7b74e8;
+    --color-volt-mist: #eeedfe;
+    --color-zapp-ink: #1a1833;
+    --color-zapp-teal: #0f6e56;
+    --color-zapp-coral: #d85a30;
+    --color-zapp-gray: #6b6b65;
+    --color-zapp-bg: #f7f6f2;
+
+    /* font sizes */
+    --text-display-xl: 3rem;
+    --text-display-lg: 2.25rem;
+    --text-display-md: 1.5rem;
+}
+
+@layer base {
+    html {
+        background-color: var(--color-zapp-bg);
+        color: var(--color-zapp-ink);
+        font-family: var(--font-sans);
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+        font-family: var(--font-display);
+    }
+}
