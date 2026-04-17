@@ -1,0 +1,74 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('projects', function (Blueprint $table) {
+            $table->id();
+            $table->string("title");
+            $table->string("slug");
+            $table->string("type");
+            $table->text("brief");
+            $table->json("stack");
+            $table->string("cover_image_url");
+            $table->decimal("earning")->default(0);
+            $table->boolean("is_maintained");
+            $table->date("started_at");
+            $table->date("ended_at")->default(null);
+            $table->timestamps();
+        });
+
+        Schema::create('project_contributors', function (Blueprint $table) {
+            $table->id();
+
+            // Foreign Keys referencing contributors to projects
+            $table->foreignId("project_id")->references("id")->on("projects");
+            $table->foreignId("user_id")->references("id")->on("users");
+
+            $table->string("name");
+            $table->string("role");
+            $table->timestamps();
+        });
+
+        Schema::create("project_timelines", function (Blueprint $table) {
+            $table->id();
+
+            // Foreign Key referencing contributors to project
+            $table->foreignId("project_id")->references("id")->on("projects");
+
+            $table->string("title");
+            $table->text("description");
+            $table->date("occurred_at");
+            $table->timestamps();
+        });
+
+        Schema::create("project_images", function (Blueprint $table) {
+            $table->id();
+
+            // Foreign Key referencing contributors to project
+            $table->foreignId("project_id")->references("id")->on("projects");
+
+            $table->string("path");
+            $table->string("caption");
+            $table->integer("sort_order");
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('projects');
+        Schema::dropIfExists('project_contributors');
+        Schema::dropIfExists('project_images');
+    }
+};
