@@ -19,4 +19,12 @@ class Service extends Model
         "duration",
         "is_active"
     ];
+
+    protected function casts(): array {
+        return [
+            "includes" => "array",
+            "price" => "decimal:12",
+            "is_active" => "boolean"
+        ];
+    }
 }

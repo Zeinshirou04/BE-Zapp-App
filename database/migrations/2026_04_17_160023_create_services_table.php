@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->string("type");
             $table->text("description");
             $table->json("includes");
-            $table->decimal("price")->default(0);
+            $table->decimal("price", 12, 2)->default(0);
             $table->string("duration");
             $table->boolean("is_active")->default(false);
             $table->timestamps();
