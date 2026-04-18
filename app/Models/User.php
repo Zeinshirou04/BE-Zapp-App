@@ -31,7 +31,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function projectContributors(): HasMany {
+    public function contributors(): HasMany {
         return $this->hasMany(ProjectContributor::class);
     }
 }
