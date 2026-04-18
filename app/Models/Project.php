@@ -19,10 +19,22 @@ class Project extends Model
         "type",
         "brief",
         "stack",
-        "cover_image",
+        "cover_image_url",
         "earning",
-        "is_maintained"
+        "is_maintained",
+        "started_at",
+        "ended_at"
     ];
+
+    protected function casts(): array {
+        return [
+            "stack" => "array",
+            "earning" => "decimal:12",
+            "is_maintained" => "boolean",
+            "started_at" => "date",
+            "ended_at" => "date"
+        ];
+    }
 
     public function contributors(): HasMany {
         return $this->hasMany(ProjectContributor::class);
