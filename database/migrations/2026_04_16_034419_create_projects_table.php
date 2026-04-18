@@ -19,9 +19,9 @@ return new class extends Migration {
             $table->json("stack");
             $table->string("cover_image_url");
             $table->decimal("earning")->default(0);
-            $table->boolean("is_maintained");
+            $table->boolean("is_maintained")->default(false);
             $table->date("started_at");
-            $table->date("ended_at")->default(null);
+            $table->date("ended_at")->nullable();
             $table->timestamps();
         });
 
@@ -30,7 +30,7 @@ return new class extends Migration {
 
             // Foreign Keys referencing contributors to projects
             $table->foreignId("project_id")->references("id")->on("projects");
-            $table->foreignId("user_id")->references("id")->on("users");
+            $table->foreignId("user_id")->nullable()->references("id")->on("users");
 
             $table->string("name");
             $table->string("role");
@@ -40,7 +40,7 @@ return new class extends Migration {
         Schema::create("project_timelines", function (Blueprint $table) {
             $table->id();
 
-            // Foreign Key referencing contributors to project
+            // Foreign Key referencing timelines to project
             $table->foreignId("project_id")->references("id")->on("projects");
 
             $table->string("title");
@@ -52,7 +52,7 @@ return new class extends Migration {
         Schema::create("project_images", function (Blueprint $table) {
             $table->id();
 
-            // Foreign Key referencing contributors to project
+            // Foreign Key referencing images to project
             $table->foreignId("project_id")->references("id")->on("projects");
 
             $table->string("path");
