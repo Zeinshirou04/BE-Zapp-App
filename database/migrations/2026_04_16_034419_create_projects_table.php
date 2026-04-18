@@ -13,24 +13,25 @@ return new class extends Migration {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->string("title");
-            $table->string("slug");
+            $table->string("slug")->unique();
             $table->string("type");
             $table->text("brief");
             $table->json("stack");
             $table->string("cover_image_url");
-            $table->decimal("earning")->default(0);
+            $table->decimal("earning", 12, 2)->default(0);
             $table->boolean("is_maintained")->default(false);
             $table->date("started_at");
             $table->date("ended_at")->nullable();
             $table->timestamps();
+
         });
 
         Schema::create('project_contributors', function (Blueprint $table) {
             $table->id();
 
             // Foreign Keys referencing contributors to projects
-            $table->foreignId("project_id")->references("id")->on("projects");
-            $table->foreignId("user_id")->nullable()->references("id")->on("users");
+            $table->foreignId("project_id")->constrained()->cascadeOnDelete();
+            $table->foreignId("user_id")->nullable()->constrained()->nullOnDelete();
 
             $table->string("name");
             $table->string("role");
@@ -41,7 +42,7 @@ return new class extends Migration {
             $table->id();
 
             // Foreign Key referencing timelines to project
-            $table->foreignId("project_id")->references("id")->on("projects");
+            $table->foreignId("project_id")->constrained()->cascadeOnDelete();
 
             $table->string("title");
             $table->text("description");
@@ -53,12 +54,14 @@ return new class extends Migration {
             $table->id();
 
             // Foreign Key referencing images to project
-            $table->foreignId("project_id")->references("id")->on("projects");
+            $table->foreignId("project_id")->constrained()->cascadeOnDelete();
 
             $table->string("path");
             $table->string("caption");
             $table->integer("sort_order");
             $table->timestamps();
+            
+            $table->index(["project_id", "sort_order"]);
         });
     }
 

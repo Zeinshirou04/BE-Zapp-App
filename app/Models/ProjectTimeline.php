@@ -11,9 +11,9 @@ class ProjectTimeline extends Model
         "project_id",
         "title",
         "description",
-        "occured_at"
+        "occurred_at"
     ];
-    
+
     public function project(): BelongsTo {
         return $this->belongsTo(Project::class);
     }

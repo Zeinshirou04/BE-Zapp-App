@@ -26,7 +26,7 @@ return new class extends Migration
             $table->id();
 
             // Foreign Key referencing contributors to submissions
-            $table->foreignId("submission_id")->references("id")->on("contact_submissions");
+            $table->foreignId("submission_id")->constrained("contact_submissions");
 
             $table->string("path");
             $table->string("original_name");
