@@ -21,6 +21,6 @@ class ContactSubmission extends Model
     ];
 
     public function attachments(): HasMany {
-        return $this->hasMany(ContactAttachment::class);
+        return $this->hasMany(ContactAttachment::class, 'submission_id');
     }
 }
