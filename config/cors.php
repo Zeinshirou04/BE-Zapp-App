@@ -23,6 +23,7 @@ return [
         'http://localhost:3000',
         'http://localhost:3001',
         'https://porto.zapp.web.id',
+        'https://admin.zapp.web.id',
     ],
 
     'allowed_origins_patterns' => [],
