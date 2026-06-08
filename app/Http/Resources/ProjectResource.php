@@ -16,7 +16,7 @@ class ProjectResource extends JsonResource
             'type'          => $this->type,
             'brief'         => $this->brief,
             'stack'         => $this->stack,
-            'cover_image'   => $this->cover_image,
+            'cover_image_url'   => $this->cover_image_url,
             'earning'       => $this->earning,
             'is_maintained' => $this->is_maintained,
             'started_at'    => $this->started_at?->toDateString(),
