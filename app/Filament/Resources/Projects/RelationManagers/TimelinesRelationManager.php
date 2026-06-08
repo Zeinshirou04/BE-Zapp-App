@@ -19,6 +19,11 @@ class TimelinesRelationManager extends RelationManager
 
     protected static ?string $relatedResource = ProjectResource::class;
 
+    public static function getTitle(\Illuminate\Database\Eloquent\Model $ownerRecord, string $pageClass): string
+    {
+        return 'Timelines';
+    }
+
     public function table(Table $table): Table
     {
         return $table

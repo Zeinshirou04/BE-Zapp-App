@@ -18,6 +18,11 @@ class ContributorsRelationManager extends RelationManager
     protected static string $relationship = 'contributors';
 
     protected static ?string $relatedResource = ProjectResource::class;
+    
+    public static function getTitle(\Illuminate\Database\Eloquent\Model $ownerRecord, string $pageClass): string
+{
+    return 'Contributors';
+}
 
     public function table(Table $table): Table
     {
