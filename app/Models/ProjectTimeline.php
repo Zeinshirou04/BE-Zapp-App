@@ -14,7 +14,15 @@ class ProjectTimeline extends Model
         "occurred_at"
     ];
 
-    public function project(): BelongsTo {
+    protected function casts(): array
+    {
+        return [
+            'occurred_at' => 'date',
+        ];
+    }
+
+    public function project(): BelongsTo
+    {
         return $this->belongsTo(Project::class);
     }
 }
