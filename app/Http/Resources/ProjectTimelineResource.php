@@ -10,7 +10,8 @@ class ProjectTimelineResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'title'       => $this->title,
+            'id' => $this->id,
+            'title' => $this->title,
             'description' => $this->description,
             'occurred_at' => $this->occurred_at?->toDateString(),
         ];
