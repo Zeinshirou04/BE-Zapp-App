@@ -14,6 +14,7 @@ class ProjectImageResource extends JsonResource
             'path' => asset('storage/' . $this->path),
             'caption' => $this->caption,
             'sort_order' => $this->sort_order,
+            'type' => $this->type,  // add this
         ];
     }
 }
