@@ -11,10 +11,12 @@ class ProjectImage extends Model
         "project_id",
         "path",
         "caption",
-        "sort_order"
+        "sort_order",
+        "type"
     ];
-    
-    public function project(): BelongsTo {
+
+    public function project(): BelongsTo
+    {
         return $this->belongsTo(Project::class);
     }
 }
