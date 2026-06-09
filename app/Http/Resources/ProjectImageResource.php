@@ -10,8 +10,9 @@ class ProjectImageResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'path'       => $this->path,
-            'caption'    => $this->caption,
+            'id' => $this->id,
+            'path' => asset('storage/' . $this->path),
+            'caption' => $this->caption,
             'sort_order' => $this->sort_order,
         ];
     }

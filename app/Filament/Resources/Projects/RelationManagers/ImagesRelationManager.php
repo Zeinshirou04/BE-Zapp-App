@@ -7,6 +7,7 @@ use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\ImageColumn;
@@ -19,9 +20,35 @@ class ImagesRelationManager extends RelationManager
 
     protected static ?string $relatedResource = ProjectResource::class;
 
-    public static function getTitle(\Illuminate\Database\Eloquent\Model $ownerRecord, string $pageClass): string
+    protected static ?string $title = 'Images';
+    protected static ?string $modelLabel = 'Image';
+
+    private function imageForm(): array
     {
-        return 'Images';
+        return [
+            FileUpload::make('path')
+                ->label('Image')
+                ->image()
+                ->disk('public')
+                ->directory('projects/images')
+                ->required()
+                ->columnSpanFull(),
+
+            Select::make('type')
+                ->options([
+                    'screenshot' => 'Screenshot',
+                    'certificate' => 'Certificate',
+                ])
+                ->default('screenshot')
+                ->required(),
+
+            TextInput::make('caption')
+                ->maxLength(255),
+
+            TextInput::make('sort_order')
+                ->numeric()
+                ->default(0),
+        ];
     }
 
     public function table(Table $table): Table
@@ -33,6 +60,13 @@ class ImagesRelationManager extends RelationManager
                     ->width(80)
                     ->height(50),
 
+                TextColumn::make('type')
+                    ->badge()
+                    ->color(fn(string $state) => match ($state) {
+                        'certificate' => 'warning',
+                        default => 'gray',
+                    }),
+
                 TextColumn::make('caption')
                     ->placeholder('No caption'),
 
@@ -43,42 +77,10 @@ class ImagesRelationManager extends RelationManager
             ->defaultSort('sort_order')
             ->reorderable('sort_order')
             ->headerActions([
-                CreateAction::make()
-                    ->form([
-                        FileUpload::make('path')
-                            ->label('Image')
-                            ->image()
-                            ->disk('public')
-                            ->directory('projects/images')
-                            ->required()
-                            ->columnSpanFull(),
-
-                        TextInput::make('caption')
-                            ->maxLength(255),
-
-                        TextInput::make('sort_order')
-                            ->numeric()
-                            ->default(0),
-                    ]),
+                CreateAction::make()->form($this->imageForm()),
             ])
             ->recordActions([
-                EditAction::make()
-                    ->form([
-                        FileUpload::make('path')
-                            ->label('Image')
-                            ->image()
-                            ->disk('public')
-                            ->directory('projects/images')
-                            ->required()
-                            ->columnSpanFull(),
-
-                        TextInput::make('caption')
-                            ->maxLength(255),
-
-                        TextInput::make('sort_order')
-                            ->numeric()
-                            ->default(0),
-                    ]),
+                EditAction::make()->form($this->imageForm()),
                 DeleteAction::make(),
             ]);
     }
