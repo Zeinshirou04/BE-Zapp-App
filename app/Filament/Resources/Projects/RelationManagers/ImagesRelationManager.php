@@ -36,8 +36,10 @@ class ImagesRelationManager extends RelationManager
 
             Select::make('type')
                 ->options([
-                    'screenshot' => 'Screenshot',
+                    'screenshot'  => 'Screenshot',
                     'certificate' => 'Certificate',
+                    'documentary' => 'Documentary',
+                    'other'       => 'Other',
                 ])
                 ->default('screenshot')
                 ->required(),
@@ -62,9 +64,11 @@ class ImagesRelationManager extends RelationManager
 
                 TextColumn::make('type')
                     ->badge()
-                    ->color(fn(string $state) => match ($state) {
+                    ->color(fn (string $state) => match ($state) {
                         'certificate' => 'warning',
-                        default => 'gray',
+                        'documentary' => 'info',
+                        'other'       => 'gray',
+                        default       => 'primary', // screenshot
                     }),
 
                 TextColumn::make('caption')

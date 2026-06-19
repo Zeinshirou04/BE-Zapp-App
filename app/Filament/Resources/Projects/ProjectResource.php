@@ -38,15 +38,16 @@ class ProjectResource extends Resource
             RelationManagers\ImagesRelationManager::class,
             RelationManagers\TimelinesRelationManager::class,
             RelationManagers\ContributorsRelationManager::class,
+            RelationManagers\LinksRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => ListProjects::route('/'),
+            'index'  => ListProjects::route('/'),
             'create' => CreateProject::route('/create'),
-            'edit' => EditProject::route('/{record}/edit'),
+            'edit'   => EditProject::route('/{record}/edit'),
         ];
     }
 }

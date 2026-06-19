@@ -5,12 +5,12 @@ namespace App\Filament\Resources\Projects\Schemas;
 use App\Models\Project;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
@@ -50,17 +50,58 @@ class ProjectForm
                     ->columnSpanFull(),
             ])->columns(2),
 
-            Section::make('Media & Stack')->components([
+            Section::make('Media')->components([
                 FileUpload::make('cover_image_url')
                     ->label('Cover Image')
                     ->image()
                     ->disk('public')
                     ->directory('projects/covers')
                     ->columnSpanFull(),
+            ]),
 
-                TagsInput::make('stack')
-                    ->label('Tech Stack')
-                    ->placeholder('e.g. Laravel, Next.js')
+            Section::make('Tech Stack')->components([
+                Repeater::make('stack')
+                    ->label('')
+                    ->schema([
+                        TextInput::make('name')
+                            ->label('Technology')
+                            ->required()
+                            ->placeholder('e.g. Laravel')
+                            ->maxLength(100),
+
+                        TextInput::make('version')
+                            ->label('Version')
+                            ->placeholder('e.g. 12.x')
+                            ->maxLength(50),
+                    ])
+                    ->columns(2)
+                    ->addActionLabel('Add Technology')
+                    ->reorderable()
+                    ->collapsible()
+                    ->itemLabel(fn (array $state): ?string =>
+                        $state['name']
+                            ? trim($state['name'] . ' ' . ($state['version'] ?? ''))
+                            : null
+                    )
+                    // Deduplicate by name (case-insensitive) on save
+                    ->mutateDehydratedStateUsing(function (?array $state): array {
+                        if (empty($state)) return [];
+
+                        $seen = [];
+                        $result = [];
+
+                        foreach ($state as $item) {
+                            $key = strtolower(trim($item['name'] ?? ''));
+                            if ($key === '' || isset($seen[$key])) continue;
+                            $seen[$key] = true;
+                            $result[] = [
+                                'name'    => trim($item['name']),
+                                'version' => trim($item['version'] ?? ''),
+                            ];
+                        }
+
+                        return $result;
+                    })
                     ->columnSpanFull(),
             ]),
 
