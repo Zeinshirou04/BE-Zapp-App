@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\ProjectLiked;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProjectResource;
 use App\Models\Project;
@@ -36,7 +37,6 @@ class ProjectController extends Controller
         return new ProjectResource($project);
     }
 
-    // POST /api/projects/{slug}/like
     public function like(Request $request, string $slug): JsonResponse
     {
         $project     = Project::where('slug', $slug)->firstOrFail();
@@ -47,13 +47,16 @@ class ProjectController extends Controller
             'fingerprint' => $fingerprint,
         ]);
 
+        $count = $project->likes()->count();
+
+        broadcast(new ProjectLiked($slug, $count));
+
         return response()->json([
-            'likes_count' => $project->likes()->count(),
+            'likes_count' => $count,
             'liked'       => true,
         ]);
     }
 
-    // DELETE /api/projects/{slug}/like
     public function unlike(Request $request, string $slug): JsonResponse
     {
         $project     = Project::where('slug', $slug)->firstOrFail();
@@ -63,13 +66,16 @@ class ProjectController extends Controller
             ->where('fingerprint', $fingerprint)
             ->delete();
 
+        $count = $project->likes()->count();
+
+        broadcast(new ProjectLiked($slug, $count));
+
         return response()->json([
-            'likes_count' => $project->likes()->count(),
+            'likes_count' => $count,
             'liked'       => false,
         ]);
     }
 
-    // GET /api/projects/{slug}/like — check if this visitor already liked
     public function likeStatus(Request $request, string $slug): JsonResponse
     {
         $project     = Project::where('slug', $slug)->firstOrFail();
@@ -85,7 +91,6 @@ class ProjectController extends Controller
         ]);
     }
 
-    // SHA-256 of IP + User-Agent — cheap, no extra deps
     private function fingerprint(Request $request): string
     {
         $raw = $request->ip() . '|' . $request->userAgent();
