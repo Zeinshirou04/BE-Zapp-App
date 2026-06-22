@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\TestimonialController;
 
@@ -29,4 +30,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // Contact — rate limited to 5 submissions per minute per IP
     Route::post('/contact', [ContactController::class, 'store'])
         ->middleware('throttle:5,1');
+
+    Route::get('/profile', [ProfileController::class, 'show']);
 });

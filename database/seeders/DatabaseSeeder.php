@@ -15,5 +15,6 @@ class DatabaseSeeder extends Seeder
             TestimonialSeeder::class,
             ContactSubmissionSeeder::class,
         ]);
+        $this->call(ProfileSeeder::class);
     }
 }
