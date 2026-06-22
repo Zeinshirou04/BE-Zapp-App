@@ -25,7 +25,6 @@ class ManageProfile extends Page implements HasForms
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserCircle;
     protected static ?string $navigationLabel = 'Profile';
     protected static ?string $title = 'Manage Profile';
-    protected string $view = 'filament.pages.manage-profile';
     protected static ?int $navigationSort = 10;
 
     public ?array $data = [];
